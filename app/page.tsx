@@ -1,69 +1,153 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Kanit, Noto_Sans_Thai, IBM_Plex_Mono } from "next/font/google";
+import { products } from "@/data/products";
+
+const kanit = Kanit({
+  subsets: ["thai", "latin"],
+  weight: ["600", "700"],
+  variable: "--font-display",
+});
+
+const notoSansThai = Noto_Sans_Thai({
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-mono",
+});
+
+const categories = [
+  {
+    code: "OFFICE",
+    th: "สินค้าออฟฟิศ",
+    href: "/products?category=office",
+    rotate: "-rotate-6",
+    delay: "[animation-delay:0ms]",
+    dot: "bg-amber-500",
+    text: "text-amber-700",
+  },
+  {
+    code: "TECH",
+    th: "อุปกรณ์ไอที",
+    href: "/products?category=tech",
+    rotate: "rotate-3",
+    delay: "[animation-delay:600ms]",
+    dot: "bg-indigo-600",
+    text: "text-indigo-700",
+  },
+  {
+    code: "LIFESTYLE",
+    th: "ไลฟ์สไตล์",
+    href: "/products?category=lifestyle",
+    rotate: "-rotate-2",
+    delay: "[animation-delay:1200ms]",
+    dot: "bg-emerald-600",
+    text: "text-emerald-700",
+  },
+];
+
 
 export default function Home() {
+  const totalCount = products.length;
+  const categoryCount = new Set(products.map((p) => p.category)).size;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div
+      className={`${kanit.variable} ${notoSansThai.variable} ${plexMono.variable} min-h-screen w-full bg-white text-slate-900 [font-family:var(--font-body)]`}
+    >
+      <style>{`
+        @keyframes tag-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+      `}</style>
+
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6">
+        <span className="text-lg font-semibold tracking-tight [font-family:var(--font-display)]">
+          Product Finder
+        </span>
+      </header>
+
+      <main>
+        <section className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-20 pt-10 md:pt-16">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-indigo-50 blur-3xl"
+          />
+
+          <div className="relative grid gap-14 md:grid-cols-2 md:items-center">
+            <div>
+              <p className="[font-family:var(--font-mono)] text-xs font-medium uppercase tracking-[0.2em] text-indigo-700">
+                Product Finder
+              </p>
+
+              <h1 className="mt-4 text-4xl font-bold leading-tight [font-family:var(--font-display)] sm:text-5xl">
+                หาไอเทมที่ใช่
+                <br />
+                ในไม่กี่คลิก
+              </h1>
+
+              <p className="mt-5 max-w-md text-base leading-relaxed text-slate-600">
+                ค้นหา กรองตามช่วงราคา และเรียงลำดับสินค้า Office, Tech และ
+                Lifestyle ได้ในหน้าเดียว
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/products"
+                  className="inline-flex items-center gap-2 rounded-lg bg-indigo-700 px-6 py-3 font-medium text-white transition hover:bg-indigo-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2"
+                >
+                  ดูสินค้าทั้งหมด
+                  <span aria-hidden="true">→</span>
+                </Link>
+
+                <span className="[font-family:var(--font-mono)] text-sm text-slate-500">
+                  {totalCount} รายการ · {categoryCount} หมวดหมู่
+                </span>
+              </div>
+            </div>
+
+            <div
+              className="relative flex flex-wrap items-start justify-center gap-6 md:justify-end"
+              aria-label="หมวดหมู่สินค้า"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+              {categories.map((category) => (
+                <Link
+                  key={category.code}
+                  href={category.href}
+                  className={`group relative ${category.rotate} transition-transform duration-300 hover:rotate-0 focus-visible:rotate-0 focus-visible:outline-none`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`absolute -top-2 left-6 h-3 w-3 rounded-full ring-4 ring-white ${category.dot}`}
+                  />
+                  <div
+                    className={`motion-safe:[animation:tag-float_5s_ease-in-out_infinite] ${category.delay} min-w-[9rem] rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-lg transition-shadow group-hover:shadow-xl group-focus-visible:ring-2 group-focus-visible:ring-indigo-600 group-focus-visible:ring-offset-2`}
+                  >
+                    <p
+                      className={`[font-family:var(--font-mono)] text-[0.65rem] font-semibold uppercase tracking-widest ${category.text}`}
+                    >
+                      {category.code}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">
+                      {category.th}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+    
       </main>
+
+      <footer className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-sm text-slate-400 sm:flex-row">
+      </footer>
     </div>
   );
 }
